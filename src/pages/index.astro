@@ -1,11 +1,402 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+export const prerender = false;
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import Layout from "../layouts/Layout.astro";
+import ContactForm from "../components/ContactForm";
 ---
 
 <Layout>
-	<Welcome />
+  <!-- ═══════════ NAWIGACJA ═══════════ -->
+  <nav
+    class="fixed top-0 left-0 z-50 w-full bg-white/90 shadow-sm backdrop-blur-sm animate-slide-down"
+  >
+    <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+      <a
+        href="#hero"
+        class="font-display text-2xl font-semibold tracking-wide text-gold"
+      >
+        Fotografia Komunijna
+      </a>
+      <ul class="hidden items-center gap-8 font-body text-sm tracking-wide text-text-light md:flex">
+        <li>
+          <a
+            href="#o-mnie"
+            class="relative py-1 transition-colors hover:text-gold after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-gold-light after:transition-all after:duration-300 hover:after:w-full"
+          >
+            O mnie
+          </a>
+        </li>
+        <li>
+          <a
+            href="#galeria"
+            class="relative py-1 transition-colors hover:text-gold after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-gold-light after:transition-all after:duration-300 hover:after:w-full"
+          >
+            Galeria
+          </a>
+        </li>
+        <li>
+          <a
+            href="#kontakt"
+            class="rounded-md border border-gold bg-transparent px-5 py-2 font-display text-sm font-medium text-gold transition-all duration-300 hover:bg-gold hover:text-white"
+          >
+            Kontakt
+          </a>
+        </li>
+      </ul>
+      <!-- Mobile hamburger -->
+      <button
+        id="mobile-menu-btn"
+        class="flex flex-col gap-1.5 md:hidden"
+        aria-label="Menu"
+      >
+        <span class="block h-0.5 w-6 bg-gold transition-transform"></span>
+        <span class="block h-0.5 w-6 bg-gold transition-opacity"></span>
+        <span class="block h-0.5 w-6 bg-gold transition-transform"></span>
+      </button>
+    </div>
+    <!-- Mobile menu -->
+    <div
+      id="mobile-menu"
+      class="hidden flex-col items-center gap-4 border-t border-cream-dark bg-white px-6 py-6 md:hidden"
+    >
+      <a href="#o-mnie" class="font-body text-text-light hover:text-gold">O mnie</a>
+      <a href="#galeria" class="font-body text-text-light hover:text-gold">Galeria</a>
+      <a
+        href="#kontakt"
+        class="rounded-md border border-gold px-5 py-2 font-display text-sm font-medium text-gold hover:bg-gold hover:text-white"
+      >
+        Kontakt
+      </a>
+    </div>
+  </nav>
+
+  <main>
+    <!-- ═══════════ HERO ═══════════ -->
+    <section
+      id="hero"
+      class="relative flex min-h-screen flex-col items-center justify-center bg-cream px-6 pt-20 text-center"
+    >
+      <div class="absolute inset-0 overflow-hidden">
+        <div
+          class="absolute top-1/4 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-gold-light/10 blur-3xl"
+        >
+        </div>
+        <div
+          class="absolute bottom-1/4 right-1/4 h-64 w-64 rounded-full bg-gold-pale/20 blur-2xl"
+        >
+        </div>
+      </div>
+
+      <div class="relative z-10 max-w-4xl">
+        <p
+          class="animate-fade-in-up mb-4 font-body text-sm uppercase tracking-[0.3em] text-gold-accent"
+        >
+          Profesjonalna fotografia
+        </p>
+        <h1
+          class="animate-fade-in-up delay-200 font-display text-5xl font-light leading-tight text-gold sm:text-6xl md:text-7xl lg:text-8xl"
+        >
+          Pierwsza Komunia
+          <span class="block font-medium italic">Święta</span>
+        </h1>
+
+        <div class="ornament animate-fade-in delay-400 my-8">
+          <span class="text-2xl text-gold-light">✦</span>
+        </div>
+
+        <p
+          class="animate-fade-in-up delay-500 mx-auto max-w-xl font-body text-lg leading-relaxed text-text-light"
+        >
+          Uwiecznij ten wyjątkowy dzień Twojego dziecka. Naturalne, pełne emocji
+          zdjęcia, które będziecie wspominać przez lata.
+        </p>
+
+        <a
+          href="#kontakt"
+          class="animate-fade-in-up delay-700 mt-10 inline-block rounded-md bg-gold px-8 py-4 font-display text-lg font-medium tracking-wide text-white transition-all duration-300 hover:bg-gold-accent hover:shadow-lg hover:shadow-gold/20"
+        >
+          Zarezerwuj termin
+        </a>
+      </div>
+
+      <!-- Scroll indicator -->
+      <div class="animate-fade-in delay-800 absolute bottom-8 flex flex-col items-center gap-2">
+        <span class="font-body text-xs tracking-widest text-gold-accent/60">
+          przewiń w dół
+        </span>
+        <div class="h-8 w-[1px] animate-pulse bg-gold-light/40"></div>
+      </div>
+    </section>
+
+    <!-- ═══════════ O MNIE ═══════════ -->
+    <section id="o-mnie" class="bg-white px-6 py-24 md:py-32">
+      <div class="reveal mx-auto max-w-5xl">
+        <div class="mb-16 text-center">
+          <p
+            class="mb-3 font-body text-sm uppercase tracking-[0.25em] text-gold-accent"
+          >
+            Poznajmy się
+          </p>
+          <h2 class="font-display text-4xl font-light text-gold md:text-5xl">
+            O mnie
+          </h2>
+          <div class="ornament mt-6">
+            <span class="text-lg text-gold-light">✦</span>
+          </div>
+        </div>
+
+        <div class="grid items-center gap-12 md:grid-cols-2">
+          <!-- Placeholder portrait -->
+          <div class="reveal delay-200 flex justify-center">
+            <div
+              class="relative h-96 w-80 overflow-hidden rounded-lg bg-cream shadow-lg"
+            >
+              <div
+                class="flex h-full w-full flex-col items-center justify-center gap-3 text-gold-accent/40"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-16 w-16"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="1"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+                  ></path>
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+                <span class="font-body text-sm">Zdjęcie fotografa</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="reveal delay-300 space-y-5">
+            <p class="font-body text-lg leading-relaxed text-text-light">
+              Jestem fotografem z wieloletnim doświadczeniem w uwiecznianiu
+              najważniejszych chwil w życiu rodzin. Specjalizuję się w fotografii
+              komunijnej, łącząc profesjonalizm z naturalnym, ciepłym podejściem.
+            </p>
+            <p class="font-body text-lg leading-relaxed text-text-light">
+              Każda sesja to dla mnie wyjątkowa historia — dbam o to, by zdjęcia
+              oddawały emocje i atmosferę tego szczególnego dnia. Pracuję zarówno
+              w kościele, jak i w plenerze, tworząc pamiątkowe kadry, które
+              będziecie wspominać z uśmiechem.
+            </p>
+            <div class="flex items-center gap-3 pt-4">
+              <div class="h-[1px] w-12 bg-gold-light"></div>
+              <span class="font-display text-sm italic text-gold-accent">
+                Ponad 200 szczęśliwych rodzin
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ GALERIA (PLACEHOLDER — Sanity CMS later) ═══════════ -->
+    <section id="galeria" class="bg-cream px-6 py-24 md:py-32">
+      <div class="reveal mx-auto max-w-6xl">
+        <div class="mb-16 text-center">
+          <p
+            class="mb-3 font-body text-sm uppercase tracking-[0.25em] text-gold-accent"
+          >
+            Portfolio
+          </p>
+          <h2 class="font-display text-4xl font-light text-gold md:text-5xl">
+            Galeria
+          </h2>
+          <div class="ornament mt-6">
+            <span class="text-lg text-gold-light">✦</span>
+          </div>
+        </div>
+
+        <!-- Placeholder grid — will be replaced with Sanity CMS dynamic content -->
+        <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+          {
+            Array.from({ length: 8 }).map((_, i) => (
+              <div
+                class={`reveal delay-${(i % 4) * 100 + 100} group relative aspect-[3/4] overflow-hidden rounded-lg bg-cream-dark shadow-md transition-all duration-500 hover:shadow-xl hover:-translate-y-1`}
+              >
+                <div class="flex h-full w-full flex-col items-center justify-center gap-2 text-gold-accent/30 transition-colors group-hover:text-gold-accent/50">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-10 w-10"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="1"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    />
+                  </svg>
+                  <span class="font-body text-xs">Zdjęcie {i + 1}</span>
+                </div>
+                <div class="absolute inset-0 bg-gradient-to-t from-gold/10 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+              </div>
+            ))
+          }
+        </div>
+
+        <p class="mt-8 text-center font-body text-sm italic text-text-light/60">
+          Galeria wkrótce zostanie uzupełniona o pełne portfolio zdjęć komunijnych.
+        </p>
+      </div>
+    </section>
+
+    <!-- ═══════════ KONTAKT ═══════════ -->
+    <section id="kontakt" class="bg-cream px-6 py-24 md:py-32">
+      <div class="reveal mx-auto max-w-5xl">
+        <div class="mb-16 text-center">
+          <p
+            class="mb-3 font-body text-sm uppercase tracking-[0.25em] text-gold-accent"
+          >
+            Napisz do mnie
+          </p>
+          <h2 class="font-display text-4xl font-light text-gold md:text-5xl">
+            Kontakt
+          </h2>
+          <div class="ornament mt-6">
+            <span class="text-lg text-gold-light">✦</span>
+          </div>
+          <p class="mx-auto mt-6 max-w-lg font-body text-text-light">
+            Zainteresowany sesją komunijną? Wypełnij formularz, a odezwę się do
+            Ciebie w ciągu 24 godzin.
+          </p>
+        </div>
+
+        <ContactForm client:load />
+      </div>
+    </section>
+  </main>
+
+  <!-- ═══════════ STOPKA ═══════════ -->
+  <footer class="border-t border-cream-dark bg-white px-6 py-12">
+    <div class="mx-auto max-w-5xl">
+      <div class="grid gap-8 md:grid-cols-3">
+        <!-- Brand -->
+        <div>
+          <h3 class="mb-3 font-display text-xl font-semibold text-gold">
+            Fotografia Komunijna
+          </h3>
+          <p class="font-body text-sm leading-relaxed text-text-light">
+            Profesjonalna fotografia Pierwszej Komunii Świętej.
+            Uwieczniamy najważniejsze chwile.
+          </p>
+        </div>
+
+        <!-- Contact details -->
+        <div>
+          <h4
+            class="mb-3 font-display text-sm font-medium uppercase tracking-widest text-gold-accent"
+          >
+            Kontakt
+          </h4>
+          <ul class="space-y-2 font-body text-sm text-text-light">
+            <li>
+              <a href="mailto:kontakt@example.com" class="hover:text-gold transition-colors">
+                kontakt@example.com
+              </a>
+            </li>
+            <li>
+              <a href="tel:+48123456789" class="hover:text-gold transition-colors">
+                +48 123 456 789
+              </a>
+            </li>
+            <li>Cała Polska</li>
+          </ul>
+        </div>
+
+        <!-- Social placeholders -->
+        <div>
+          <h4
+            class="mb-3 font-display text-sm font-medium uppercase tracking-widest text-gold-accent"
+          >
+            Social Media
+          </h4>
+          <div class="flex gap-4">
+            <a
+              href="#"
+              aria-label="Instagram"
+              class="flex h-10 w-10 items-center justify-center rounded-full border border-cream-dark text-gold-accent transition-all duration-300 hover:border-gold hover:bg-gold hover:text-white"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="1.5"
+              >
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"
+                ></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+            </a>
+            <a
+              href="#"
+              aria-label="Facebook"
+              class="flex h-10 w-10 items-center justify-center rounded-full border border-cream-dark text-gold-accent transition-all duration-300 hover:border-gold hover:bg-gold hover:text-white"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="1.5"
+              >
+                <path
+                  d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"
+                ></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="mt-10 border-t border-cream-dark pt-6 text-center font-body text-xs text-text-light/60"
+      >
+        © <span id="copyright-year"></span> Fotografia Komunijna. Wszelkie prawa
+        zastrzeżone.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Mobile menu toggle script -->
+  <script>
+    const btn = document.getElementById("mobile-menu-btn");
+    const menu = document.getElementById("mobile-menu");
+
+    btn?.addEventListener("click", () => {
+      const isOpen = menu?.classList.contains("flex");
+      menu?.classList.toggle("hidden", isOpen ?? false);
+      menu?.classList.toggle("flex", !isOpen);
+    });
+
+    // Close mobile menu on link click
+    menu?.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        menu?.classList.add("hidden");
+        menu?.classList.remove("flex");
+      });
+    });
+
+    // Set copyright year dynamically
+    const yearEl = document.getElementById("copyright-year");
+    if (yearEl) {
+      yearEl.textContent = new Date().getFullYear().toString();
+    }
+  </script>
 </Layout>
