@@ -1,0 +1,66 @@
+---
+import { Picture, getImage } from "astro:assets";
+
+const galleryImageFiles = import.meta.glob<{ default: ImageMetadata }>(
+  "../assets/gallery/*.{jpg,jpeg,png,webp,avif}",
+  { eager: true }
+);
+
+const galleryImages = await Promise.all(
+  Object.values(galleryImageFiles).map(async (mod) => {
+    const full = await getImage({ src: mod.default, width: 1800, quality: 90 });
+    return {
+      src: mod.default,
+      fullSrc: full.src,
+      fullWidth: full.attributes.width ?? mod.default.width,
+      fullHeight: full.attributes.height ?? mod.default.height,
+    };
+  })
+);
+---
+
+<section id="galeria" class="bg-cream px-6 pt-24 pb-10 md:pt-32 md:pb-14">
+  <div class="mx-auto max-w-6xl">
+    <div class="mb-16 text-center">
+      <p
+        class="mb-3 font-body text-sm uppercase tracking-[0.25em] text-gold-accent"
+      >
+        Portfolio
+      </p>
+      <h2 class="font-display text-4xl font-light text-gold md:text-5xl">
+        Galeria
+      </h2>
+      <div class="ornament mt-6">
+        <span class="text-lg text-gold-light">✦</span>
+      </div>
+    </div>
+
+    <div id="masonry-gallery" class="pswp-gallery mx-auto">
+      {
+        galleryImages.map((img, i) => (
+          <a
+            href={img.fullSrc}
+            data-pswp-width={img.fullWidth}
+            data-pswp-height={img.fullHeight}
+            target="_blank"
+            rel="noreferrer"
+            class="masonry-item group relative mb-4 block overflow-hidden rounded-lg bg-cream-dark shadow-md transition-[box-shadow,transform] duration-500 hover:shadow-xl hover:-translate-y-1"
+          >
+            <Picture
+              src={img.src}
+              formats={["avif", "webp"]}
+              fallbackFormat="jpg"
+              alt={`Zdjęcie komunijne ${i + 1}`}
+              width={600}
+              height={800}
+              quality={90}
+              class="block w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              loading={i < 4 ? "eager" : "lazy"}
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-gold/10 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</section>

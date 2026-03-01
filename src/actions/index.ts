@@ -11,7 +11,7 @@ export const server = {
     input: z.object({
       name: z.string().min(2),
       email: z.string().email(),
-      phone: z.string().optional(),
+      phone: z.string().regex(/^\d{9}$/, "Podaj prawidłowy numer telefonu (9 cyfr)"),
       message: z.string().min(10),
     }),
     handler: async (input) => {
@@ -33,7 +33,7 @@ export const server = {
         ``,
         `Imię: ${name}`,
         `E-mail: ${email}`,
-        phone ? `Telefon: ${phone}` : null,
+        `Telefon: ${phone}`,
         `Wiadomość: ${message}`,
         ``,
         `---`,
@@ -63,15 +63,13 @@ export const server = {
                   <a href="mailto:${email}" style="color: #b8960c;">${email}</a>
                 </td>
               </tr>
-              ${phone ? `
               <tr>
                 <td style="padding: 8px 12px; font-weight: 600; color: #6b5d3e; vertical-align: top;">Telefon:</td>
                 <td style="padding: 8px 12px; color: #3d3425;">
                   <a href="tel:${phone}" style="color: #b8960c;">${phone}</a>
                 </td>
               </tr>
-              ` : ""}
-              <tr style="background: ${phone ? '#f5f0e6' : 'transparent'};">
+              <tr style="background: #f5f0e6;">
                 <td style="padding: 8px 12px; font-weight: 600; color: #6b5d3e; vertical-align: top;">Wiadomość:</td>
                 <td style="padding: 8px 12px; color: #3d3425; white-space: pre-wrap;">${message}</td>
               </tr>

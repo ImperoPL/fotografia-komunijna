@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import { SEO } from "astro-seo";
 
 interface Props {
   title?: string;
@@ -11,7 +12,8 @@ const {
   description = "Profesjonalna fotografia Pierwszej Komunii Świętej. Uwiecznij ten wyjątkowy dzień Twojego dziecka. Naturalne, pełne emocji zdjęcia komunijne.",
 } = Astro.props;
 
-const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? "https://example.com");
+const siteUrl = Astro.site?.href ?? "https://fotografkomunijny.pl";
+const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
 ---
 
 <!doctype html>
@@ -22,18 +24,37 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? "https://example.
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
 
-    <!-- SEO -->
-    <title>{title}</title>
-    <meta name="description" content={description} />
-    <meta name="robots" content="index, follow" />
-    <link rel="canonical" href={canonicalUrl.href} />
-
-    <!-- Open Graph -->
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:locale" content="pl_PL" />
-    <meta property="og:url" content={canonicalUrl.href} />
+    <SEO
+      title={title}
+      description={description}
+      canonical={canonicalUrl}
+      noindex={false}
+      nofollow={false}
+      openGraph={{
+        basic: {
+          title: title,
+          type: "website",
+          image: "",
+          url: canonicalUrl,
+        },
+        optional: {
+          description: description,
+          locale: "pl_PL",
+          siteName: "Fotografia Komunijna",
+        },
+      }}
+      twitter={{
+        card: "summary_large_image",
+        title: title,
+        description: description,
+      }}
+      extend={{
+        meta: [
+          { name: "author", content: "Fotografia Komunijna" },
+          { name: "theme-color", content: "#b8860b" },
+        ],
+      }}
+    />
 
     <!-- Google Fonts: Cormorant Garamond (display) + Lato (body) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -52,9 +73,8 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? "https://example.
       "name": "Fotografia Komunijna",
       "description": description,
       "image": "",
-      "url": canonicalUrl.href,
-      "@id": canonicalUrl.href,
-      "priceRange": "$$",
+      "url": canonicalUrl,
+      "@id": canonicalUrl,
       "address": {
         "@type": "PostalAddress",
         "addressLocality": "Polska",

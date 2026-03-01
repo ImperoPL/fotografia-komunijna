@@ -1,0 +1,62 @@
+<nav
+  class="fixed top-0 left-0 z-50 w-full bg-white/90 shadow-sm backdrop-blur-sm"
+>
+  <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+    <a
+      href="#hero"
+      class="font-display text-2xl font-semibold tracking-wide text-gold"
+    >
+      Fotografia Komunijna
+    </a>
+    <ul class="hidden items-center gap-8 font-body text-sm tracking-wide text-text-light md:flex">
+      <li>
+        <a
+          href="#o-mnie"
+          class="relative py-1 transition-colors hover:text-gold after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-gold-light after:transition-all after:duration-300 hover:after:w-full"
+        >
+          O mnie
+        </a>
+      </li>
+      <li>
+        <a
+          href="#galeria"
+          class="relative py-1 transition-colors hover:text-gold after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-gold-light after:transition-all after:duration-300 hover:after:w-full"
+        >
+          Galeria
+        </a>
+      </li>
+      <li>
+        <a
+          href="#kontakt"
+          class="rounded-md border border-gold bg-transparent px-5 py-2 font-display text-sm font-medium text-gold transition-all duration-300 hover:bg-gold hover:text-white"
+        >
+          Kontakt
+        </a>
+      </li>
+    </ul>
+    <!-- Mobile hamburger -->
+    <button
+      id="mobile-menu-btn"
+      class="flex flex-col gap-1.5 md:hidden"
+      aria-label="Menu"
+    >
+      <span class="block h-0.5 w-6 bg-gold transition-transform"></span>
+      <span class="block h-0.5 w-6 bg-gold transition-opacity"></span>
+      <span class="block h-0.5 w-6 bg-gold transition-transform"></span>
+    </button>
+  </div>
+  <!-- Mobile menu -->
+  <div
+    id="mobile-menu"
+    class="hidden flex-col items-center gap-4 border-t border-cream-dark bg-white px-6 py-6 md:hidden"
+  >
+    <a href="#o-mnie" class="font-body text-text-light hover:text-gold">O mnie</a>
+    <a href="#galeria" class="font-body text-text-light hover:text-gold">Galeria</a>
+    <a
+      href="#kontakt"
+      class="rounded-md border border-gold px-5 py-2 font-display text-sm font-medium text-gold hover:bg-gold hover:text-white"
+    >
+      Kontakt
+    </a>
+  </div>
+</nav>

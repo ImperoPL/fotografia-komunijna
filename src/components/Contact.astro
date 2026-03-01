@@ -1,0 +1,26 @@
+---
+import ContactForm from "./ContactForm";
+---
+
+<section id="kontakt" class="bg-cream px-6 pt-10 pb-24 md:pt-14 md:pb-32">
+  <div class="mx-auto max-w-5xl">
+    <div class="mb-16 text-center">
+      <p
+        class="mb-3 font-body text-sm uppercase tracking-[0.25em] text-gold-accent"
+      >
+        Napisz do mnie
+      </p>
+      <h2 class="font-display text-4xl font-light text-gold md:text-5xl">
+        Kontakt
+      </h2>
+      <div class="ornament mt-6">
+        <span class="text-lg text-gold-light">✦</span>
+      </div>
+      <p class="mx-auto mt-6 max-w-lg font-body text-text-light">
+        Szanowni Rodzice, serdecznie zapraszam do kontaktu.
+      </p>
+    </div>
+
+    <ContactForm client:visible />
+  </div>
+</section>

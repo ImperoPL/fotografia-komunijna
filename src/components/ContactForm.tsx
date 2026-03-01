@@ -1,6 +1,5 @@
 import { useForm } from "@tanstack/react-form";
 import { actions } from "astro:actions";
-import { contactSchema } from "../schemas/contact";
 import { useState } from "react";
 
 export default function ContactForm() {
@@ -15,9 +14,6 @@ export default function ContactForm() {
       email: "",
       phone: "",
       message: "",
-    },
-    validators: {
-      onChange: contactSchema,
     },
     onSubmit: async ({ value }) => {
       try {
@@ -60,7 +56,13 @@ export default function ContactForm() {
       className="mx-auto max-w-2xl space-y-6"
     >
       {/* Name */}
-      <form.Field name="name">
+      <form.Field
+        name="name"
+        validators={{
+          onBlur: ({ value }) =>
+            value.length < 2 ? "Imię musi mieć co najmniej 2 znaki" : undefined,
+        }}
+      >
         {(field) => (
           <div className="space-y-1">
             <label
@@ -79,9 +81,9 @@ export default function ContactForm() {
               onBlur={field.handleBlur}
               className="w-full rounded-md border border-gold-pale bg-white px-4 py-3 font-body text-text placeholder:text-text-light/50 transition-colors focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20"
             />
-            {field.state.meta.errors?.length > 0 && (
+            {field.state.meta.isTouched && field.state.meta.errors?.length > 0 && field.state.value.length < 2 && (
               <p className="text-sm text-red-600">
-                {field.state.meta.errors.map((e: any) => typeof e === 'string' ? e : e?.message ?? '').join(', ')}
+                {[...new Set(field.state.meta.errors.map((e: any) => typeof e === 'string' ? e : e?.message ?? ''))].join(', ')}
               </p>
             )}
           </div>
@@ -89,7 +91,13 @@ export default function ContactForm() {
       </form.Field>
 
       {/* Email */}
-      <form.Field name="email">
+      <form.Field
+        name="email"
+        validators={{
+          onBlur: ({ value }) =>
+            !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? "Podaj prawidłowy adres e-mail" : undefined,
+        }}
+      >
         {(field) => (
           <div className="space-y-1">
             <label
@@ -108,41 +116,58 @@ export default function ContactForm() {
               onBlur={field.handleBlur}
               className="w-full rounded-md border border-gold-pale bg-white px-4 py-3 font-body text-text placeholder:text-text-light/50 transition-colors focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20"
             />
-            {field.state.meta.errors?.length > 0 && (
+            {field.state.meta.isTouched && field.state.meta.errors?.length > 0 && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.state.value) && (
               <p className="text-sm text-red-600">
-                {field.state.meta.errors.map((e: any) => typeof e === 'string' ? e : e?.message ?? '').join(', ')}
+                {[...new Set(field.state.meta.errors.map((e: any) => typeof e === 'string' ? e : e?.message ?? ''))].join(', ')}
               </p>
             )}
           </div>
         )}
       </form.Field>
 
-      {/* Phone (optional) */}
-      <form.Field name="phone">
+      {/* Phone */}
+      <form.Field
+        name="phone"
+        validators={{
+          onBlur: ({ value }) =>
+            !/^\d{9}$/.test(value) ? "Podaj prawidłowy numer telefonu (9 cyfr)" : undefined,
+        }}
+      >
         {(field) => (
           <div className="space-y-1">
             <label
               htmlFor="phone"
               className="block font-display text-lg font-medium text-gold"
             >
-              Telefon <span className="text-sm text-text-light">(opcjonalnie)</span>
+              Telefon
             </label>
             <input
               id="phone"
               name="phone"
               type="tel"
-              placeholder="+48 123 456 789"
+              placeholder="123456789"
               value={field.state.value}
               onChange={(e) => field.handleChange(e.target.value)}
               onBlur={field.handleBlur}
               className="w-full rounded-md border border-gold-pale bg-white px-4 py-3 font-body text-text placeholder:text-text-light/50 transition-colors focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20"
             />
+            {field.state.meta.isTouched && field.state.meta.errors?.length > 0 && !/^\d{9}$/.test(field.state.value) && (
+              <p className="text-sm text-red-600">
+                {[...new Set(field.state.meta.errors.map((e: any) => typeof e === 'string' ? e : e?.message ?? ''))].join(', ')}
+              </p>
+            )}
           </div>
         )}
       </form.Field>
 
       {/* Message */}
-      <form.Field name="message">
+      <form.Field
+        name="message"
+        validators={{
+          onBlur: ({ value }) =>
+            value.length < 10 ? "Wiadomość musi mieć co najmniej 10 znaków" : undefined,
+        }}
+      >
         {(field) => (
           <div className="space-y-1">
             <label
@@ -155,15 +180,15 @@ export default function ContactForm() {
               id="message"
               name="message"
               rows={5}
-              placeholder="Opisz czego szukasz — termin, miejsce, liczba zdjęć..."
+              placeholder="Opisz czego szukasz — termin, miejsce uroczystości, miejce przyjęcia komunijnego..."
               value={field.state.value}
               onChange={(e) => field.handleChange(e.target.value)}
               onBlur={field.handleBlur}
               className="w-full resize-y rounded-md border border-gold-pale bg-white px-4 py-3 font-body text-text placeholder:text-text-light/50 transition-colors focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20"
             />
-            {field.state.meta.errors?.length > 0 && (
+            {field.state.meta.isTouched && field.state.meta.errors?.length > 0 && field.state.value.length < 10 && (
               <p className="text-sm text-red-600">
-                {field.state.meta.errors.map((e: any) => typeof e === 'string' ? e : e?.message ?? '').join(', ')}
+                {[...new Set(field.state.meta.errors.map((e: any) => typeof e === 'string' ? e : e?.message ?? ''))].join(', ')}
               </p>
             )}
           </div>

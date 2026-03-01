@@ -1,0 +1,57 @@
+---
+import { Picture } from "astro:assets";
+
+const aboutImageFiles = import.meta.glob<{ default: ImageMetadata }>(
+  "../assets/about/*.{jpg,jpeg,png,webp,avif}",
+  { eager: true }
+);
+const aboutImage = Object.values(aboutImageFiles)[0]?.default;
+---
+
+<section id="o-mnie" class="bg-white px-6 py-24 md:py-32">
+  <div class="mx-auto max-w-5xl">
+    <div class="mb-16 text-center">
+      <p
+        class="mb-3 font-body text-sm uppercase tracking-[0.25em] text-gold-accent"
+      >
+        Poznajmy się
+      </p>
+      <h2 class="font-display text-4xl font-light text-gold md:text-5xl">
+        O mnie
+      </h2>
+      <div class="ornament mt-6">
+        <span class="text-lg text-gold-light">✦</span>
+      </div>
+    </div>
+
+    <div class="grid items-center gap-12 md:grid-cols-2">
+      <div class="flex justify-center">
+        <div
+          class="relative h-[500px] w-80 overflow-hidden rounded-lg bg-cream shadow-lg"
+        >
+          {aboutImage && (
+            <Picture
+              src={aboutImage}
+              formats={["avif", "webp"]}
+              fallbackFormat="jpg"
+              alt="Pani fotograf"
+              width={1280}
+              height={2000}
+              quality={95}
+              class="h-full w-full object-cover object-top"
+            />
+          )}
+        </div>
+      </div>
+
+      <div class="space-y-5">
+        <p class="font-body text-lg leading-relaxed text-text-light">
+          Jestem zawodowym fotografem z wieloletnim doświadczeniem w uwiecznianiu najważniejszych chwil w życiu rodzin. Specjalizuję się w fotografii komunijnej, łącząc profesjonalizm z naturalnym, ciepłym podejściem.
+        </p>
+        <p class="font-body text-lg leading-relaxed text-text-light">
+          Każda sesja to dla mnie wyjątkowa historia — dbam o to, by zdjęcia oddawały emocje i atmosferę tego szczególnego dnia. Wykonuję reportaże w kościele, na przyjęciach komunijnych, a także sesje fotograficzne w plenerze oraz w studio, tworząc pamiątkowe kadry, które będziecie wspominać z uśmiechem.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
