@@ -1,25 +1,41 @@
 ---
 export const prerender = true;
 
-import { Picture } from "astro:assets";
+import { Picture, getImage } from "astro:assets";
 import Layout from "../layouts/Layout.astro";
 import ContactForm from "../components/ContactForm";
 
-const galleryImages = [
-  "https://e4xaiorglwqwok6k.public.blob.vercel-storage.com/DSC_3975pieknafotografia.plimperoimages.com.jpg",
-  "https://e4xaiorglwqwok6k.public.blob.vercel-storage.com/DSC_5341pieknafotografia.plimperoimages.com.jpg",
-  "https://e4xaiorglwqwok6k.public.blob.vercel-storage.com/DSC_9168pieknafotografia.plimperoimages.com.jpg",
-  "https://e4xaiorglwqwok6k.public.blob.vercel-storage.com/DSC_9181pieknafotografia.plimperoimages.com.jpg",
-  "https://e4xaiorglwqwok6k.public.blob.vercel-storage.com/DSC_9734pieknafotografia.plimperoimages.com.jpg",
-  "https://e4xaiorglwqwok6k.public.blob.vercel-storage.com/DSC_9658pieknafotografia.plimperoimages.com.jpg",
-  "https://e4xaiorglwqwok6k.public.blob.vercel-storage.com/DSC_9835pieknafotografia.plimperoimages.com.jpg",
-];
+// Import about/profile image
+const aboutImageFiles = import.meta.glob<{ default: ImageMetadata }>(
+  "../assets/about/*.{jpg,jpeg,png,webp,avif}",
+  { eager: true }
+);
+const aboutImage = Object.values(aboutImageFiles)[0]?.default;
+
+// Import all images from the gallery folder
+const galleryImageFiles = import.meta.glob<{ default: ImageMetadata }>(
+  "../assets/gallery/*.{jpg,jpeg,png,webp,avif}",
+  { eager: true }
+);
+
+// Sort by filename and prepare optimized images for PhotoSwipe
+const galleryImages = await Promise.all(
+  Object.values(galleryImageFiles).map(async (mod) => {
+    const full = await getImage({ src: mod.default, width: 1800, quality: 90 });
+    return {
+      src: mod.default,
+      fullSrc: full.src,
+      fullWidth: full.attributes.width ?? mod.default.width,
+      fullHeight: full.attributes.height ?? mod.default.height,
+    };
+  })
+);
 ---
 
 <Layout>
   <!-- ═══════════ NAWIGACJA ═══════════ -->
   <nav
-    class="fixed top-0 left-0 z-50 w-full bg-white/90 shadow-sm backdrop-blur-sm animate-slide-down"
+    class="fixed top-0 left-0 z-50 w-full bg-white/90 shadow-sm backdrop-blur-sm"
   >
     <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
       <a
@@ -85,7 +101,7 @@ const galleryImages = [
     <!-- ═══════════ HERO ═══════════ -->
     <section
       id="hero"
-      class="relative flex min-h-screen flex-col items-center justify-center bg-cream px-6 pt-20 text-center"
+      class="relative flex min-h-[70vh] flex-col items-center justify-center bg-cream px-6 pt-16 pb-6 text-center"
     >
       <div class="absolute inset-0 overflow-hidden">
         <div
@@ -100,23 +116,23 @@ const galleryImages = [
 
       <div class="relative z-10 max-w-4xl">
         <p
-          class="animate-fade-in-up mb-4 font-body text-sm uppercase tracking-[0.3em] text-gold-accent"
+          class="mb-4 font-body text-sm uppercase tracking-[0.3em] text-gold-accent"
         >
           Profesjonalna fotografia
         </p>
         <h1
-          class="animate-fade-in-up delay-200 font-display text-5xl font-light leading-tight text-gold sm:text-6xl md:text-7xl lg:text-8xl"
+          class="font-display text-5xl font-medium italic leading-tight text-gold sm:text-6xl md:text-7xl lg:text-8xl"
         >
           Pierwsza Komunia
-          <span class="block font-medium italic">Święta</span>
+          <span class="block">Święta</span>
         </h1>
 
-        <div class="ornament animate-fade-in delay-400 my-8">
+        <div class="ornament my-5">
           <span class="text-2xl text-gold-light">✦</span>
         </div>
 
         <p
-          class="animate-fade-in-up delay-500 mx-auto max-w-xl font-body text-lg leading-relaxed text-text-light"
+          class="mx-auto max-w-xl font-body text-lg leading-relaxed text-text-light"
         >
           Uwiecznij ten wyjątkowy dzień Twojego dziecka. Naturalne, pełne emocji
           zdjęcia, które będziecie wspominać przez lata.
@@ -124,24 +140,17 @@ const galleryImages = [
 
         <a
           href="#kontakt"
-          class="animate-fade-in-up delay-700 mt-10 inline-block rounded-md bg-gold px-8 py-4 font-display text-lg font-medium tracking-wide text-white transition-all duration-300 hover:bg-gold-accent hover:shadow-lg hover:shadow-gold/20"
+          class="mt-7 inline-block rounded-md bg-gold px-8 py-3.5 font-display text-lg font-medium tracking-wide text-white transition-all duration-300 hover:bg-gold-accent hover:shadow-lg hover:shadow-gold/20"
         >
           Zarezerwuj termin
         </a>
       </div>
 
-      <!-- Scroll indicator -->
-      <div class="animate-fade-in delay-800 absolute bottom-8 flex flex-col items-center gap-2">
-        <span class="font-body text-xs tracking-widest text-gold-accent/60">
-          przewiń w dół
-        </span>
-        <div class="h-8 w-[1px] animate-pulse bg-gold-light/40"></div>
-      </div>
     </section>
 
     <!-- ═══════════ O MNIE ═══════════ -->
     <section id="o-mnie" class="bg-white px-6 py-24 md:py-32">
-      <div class="reveal mx-auto max-w-5xl">
+      <div class="mx-auto max-w-5xl">
         <div class="mb-16 text-center">
           <p
             class="mb-3 font-body text-sm uppercase tracking-[0.25em] text-gold-accent"
@@ -157,49 +166,40 @@ const galleryImages = [
         </div>
 
         <div class="grid items-center gap-12 md:grid-cols-2">
-          <div class="reveal delay-200 flex justify-center">
+          <div class="flex justify-center">
             <div
               class="relative h-[500px] w-80 overflow-hidden rounded-lg bg-cream shadow-lg"
             >
-              <Picture
-                src="https://e4xaiorglwqwok6k.public.blob.vercel-storage.com/fotograf/zdjecie-pani-fotograf.jpg"
-                formats={["avif", "webp"]}
-                fallbackFormat="jpg"
-                alt="Pani fotograf"
-                width={1280}
-                height={2000}
-                quality={95}
-                class="h-full w-full object-cover object-top"
-              />
+              {aboutImage && (
+                <Picture
+                  src={aboutImage}
+                  formats={["avif", "webp"]}
+                  fallbackFormat="jpg"
+                  alt="Pani fotograf"
+                  width={1280}
+                  height={2000}
+                  quality={95}
+                  class="h-full w-full object-cover object-top"
+                />
+              )}
             </div>
           </div>
 
-          <div class="reveal delay-300 space-y-5">
+          <div class="space-y-5">
             <p class="font-body text-lg leading-relaxed text-text-light">
-              Jestem fotografem z wieloletnim doświadczeniem w uwiecznianiu
-              najważniejszych chwil w życiu rodzin. Specjalizuję się w fotografii
-              komunijnej, łącząc profesjonalizm z naturalnym, ciepłym podejściem.
+              Jestem zawodowym fotografem z wieloletnim doświadczeniem w uwiecznianiu najważniejszych chwil w życiu rodzin. Specjalizuję się w fotografii komunijnej, łącząc profesjonalizm z naturalnym, ciepłym podejściem.
             </p>
             <p class="font-body text-lg leading-relaxed text-text-light">
-              Każda sesja to dla mnie wyjątkowa historia — dbam o to, by zdjęcia
-              oddawały emocje i atmosferę tego szczególnego dnia. Pracuję zarówno
-              w kościele, jak i w plenerze, tworząc pamiątkowe kadry, które
-              będziecie wspominać z uśmiechem.
+              Każda sesja to dla mnie wyjątkowa historia — dbam o to, by zdjęcia oddawały emocje i atmosferę tego szczególnego dnia. Wykonuję reportaże w kościele, na przyjęciach komunijnych, a także sesje fotograficzne w plenerze oraz w studio, tworząc pamiątkowe kadry, które będziecie wspominać z uśmiechem.
             </p>
-            <div class="flex items-center gap-3 pt-4">
-              <div class="h-[1px] w-12 bg-gold-light"></div>
-              <span class="font-display text-sm italic text-gold-accent">
-                Ponad 200 szczęśliwych rodzin
-              </span>
-            </div>
           </div>
         </div>
       </div>
     </section>
 
     <!-- ═══════════ GALERIA (PLACEHOLDER — Sanity CMS later) ═══════════ -->
-    <section id="galeria" class="bg-cream px-6 py-24 md:py-32">
-      <div class="reveal mx-auto max-w-6xl">
+    <section id="galeria" class="bg-cream px-6 pt-24 pb-10 md:pt-32 md:pb-14">
+      <div class="mx-auto max-w-6xl">
         <div class="mb-16 text-center">
           <p
             class="mb-3 font-body text-sm uppercase tracking-[0.25em] text-gold-accent"
@@ -214,14 +214,19 @@ const galleryImages = [
           </div>
         </div>
 
-        <div id="masonry-gallery" class="mx-auto">
+        <div id="masonry-gallery" class="pswp-gallery mx-auto">
           {
-            galleryImages.map((src, i) => (
-              <div
-                class="masonry-item group relative mb-4 overflow-hidden rounded-lg bg-cream-dark shadow-md transition-all duration-500 hover:shadow-xl hover:-translate-y-1"
+            galleryImages.map((img, i) => (
+              <a
+                href={img.fullSrc}
+                data-pswp-width={img.fullWidth}
+                data-pswp-height={img.fullHeight}
+                target="_blank"
+                rel="noreferrer"
+                class="masonry-item group relative mb-4 block overflow-hidden rounded-lg bg-cream-dark shadow-md transition-[box-shadow,transform] duration-500 hover:shadow-xl hover:-translate-y-1"
               >
                 <Picture
-                  src={src}
+                  src={img.src}
                   formats={["avif", "webp"]}
                   fallbackFormat="jpg"
                   alt={`Zdjęcie komunijne ${i + 1}`}
@@ -232,7 +237,7 @@ const galleryImages = [
                   loading={i < 4 ? "eager" : "lazy"}
                 />
                 <div class="absolute inset-0 bg-gradient-to-t from-gold/10 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-              </div>
+              </a>
             ))
           }
         </div>
@@ -240,8 +245,8 @@ const galleryImages = [
     </section>
 
     <!-- ═══════════ KONTAKT ═══════════ -->
-    <section id="kontakt" class="bg-cream px-6 py-24 md:py-32">
-      <div class="reveal mx-auto max-w-5xl">
+    <section id="kontakt" class="bg-cream px-6 pt-10 pb-24 md:pt-14 md:pb-32">
+      <div class="mx-auto max-w-5xl">
         <div class="mb-16 text-center">
           <p
             class="mb-3 font-body text-sm uppercase tracking-[0.25em] text-gold-accent"
@@ -267,92 +272,39 @@ const galleryImages = [
 
   <!-- ═══════════ STOPKA ═══════════ -->
   <footer class="border-t border-cream-dark bg-white px-6 py-12">
-    <div class="mx-auto max-w-5xl">
-      <div class="grid gap-8 md:grid-cols-3">
-        <!-- Brand -->
-        <div>
-          <h3 class="mb-3 font-display text-xl font-semibold text-gold">
-            Fotografia Komunijna
-          </h3>
-          <p class="font-body text-sm leading-relaxed text-text-light">
-            Profesjonalna fotografia Pierwszej Komunii Świętej.
-            Uwieczniamy najważniejsze chwile.
-          </p>
-        </div>
+    <div class="mx-auto max-w-5xl text-center">
+      <!-- Brand -->
+      <h3 class="mb-3 font-display text-xl font-semibold text-gold">
+        Fotografia Komunijna
+      </h3>
+      <p class="font-body text-sm leading-relaxed text-text-light">
+        Profesjonalna fotografia Pierwszej Komunii Świętej.
+        Uwieczniamy najważniejsze chwile.
+      </p>
 
-        <!-- Contact details -->
-        <div>
-          <h4
-            class="mb-3 font-display text-sm font-medium uppercase tracking-widest text-gold-accent"
-          >
-            Kontakt
-          </h4>
-          <ul class="space-y-2 font-body text-sm text-text-light">
-            <li>
-              <a href="mailto:kontakt@example.com" class="hover:text-gold transition-colors">
-                kontakt@example.com
-              </a>
-            </li>
-            <li>
-              <a href="tel:+48123456789" class="hover:text-gold transition-colors">
-                +48 123 456 789
-              </a>
-            </li>
-            <li>Cała Polska</li>
-          </ul>
-        </div>
+      <!-- Contact details -->
+      <h4
+        class="mt-8 mb-3 font-display text-sm font-medium uppercase tracking-widest text-gold-accent"
+      >
+        Kontakt
+      </h4>
+      <ul class="space-y-2 font-body text-sm text-text-light">
+        <li>
+          <a href="mailto:pieknafotografia@gmail.com" class="hover:text-gold transition-colors">
+            pieknafotografia@gmail.com
+          </a>
+        </li>
+        <li>
+          <a href="tel:+48509600680" class="hover:text-gold transition-colors">
+            509 600 680
+          </a>
+        </li>
+        <li>Cała Polska</li>
+      </ul>
 
-        <!-- Social placeholders -->
-        <div>
-          <h4
-            class="mb-3 font-display text-sm font-medium uppercase tracking-widest text-gold-accent"
-          >
-            Social Media
-          </h4>
-          <div class="flex gap-4">
-            <a
-              href="#"
-              aria-label="Instagram"
-              class="flex h-10 w-10 items-center justify-center rounded-full border border-cream-dark text-gold-accent transition-all duration-300 hover:border-gold hover:bg-gold hover:text-white"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="1.5"
-              >
-                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"
-                ></path>
-                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-              </svg>
-            </a>
-            <a
-              href="#"
-              aria-label="Facebook"
-              class="flex h-10 w-10 items-center justify-center rounded-full border border-cream-dark text-gold-accent transition-all duration-300 hover:border-gold hover:bg-gold hover:text-white"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="1.5"
-              >
-                <path
-                  d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"
-                ></path>
-              </svg>
-            </a>
-          </div>
-        </div>
-      </div>
-
+      <!-- Copyright -->
       <div
-        class="mt-10 border-t border-cream-dark pt-6 text-center font-body text-xs text-text-light/60"
+        class="mt-10 border-t border-cream-dark pt-6 font-body text-xs text-text-light/60"
       >
         © <span id="copyright-year"></span> Fotografia Komunijna. Wszelkie prawa
         zastrzeżone.
@@ -360,75 +312,6 @@ const galleryImages = [
     </div>
   </footer>
 
-  <!-- Mobile menu toggle script -->
-  <script>
-    const btn = document.getElementById("mobile-menu-btn");
-    const menu = document.getElementById("mobile-menu");
-
-    btn?.addEventListener("click", () => {
-      const isOpen = menu?.classList.contains("flex");
-      menu?.classList.toggle("hidden", isOpen ?? false);
-      menu?.classList.toggle("flex", !isOpen);
-    });
-
-    // Close mobile menu on link click
-    menu?.querySelectorAll("a").forEach((link) => {
-      link.addEventListener("click", () => {
-        menu?.classList.add("hidden");
-        menu?.classList.remove("flex");
-      });
-    });
-
-    // Set copyright year dynamically
-    const yearEl = document.getElementById("copyright-year");
-    if (yearEl) {
-      yearEl.textContent = new Date().getFullYear().toString();
-    }
-  </script>
-
-  <!-- Masonry gallery initialization -->
-  <style>
-    .masonry-item {
-      width: calc(50% - 8px);
-    }
-    @media (min-width: 768px) {
-      .masonry-item {
-        width: calc(33.333% - 11px);
-      }
-    }
-    @media (min-width: 1024px) {
-      .masonry-item {
-        width: calc(25% - 12px);
-      }
-    }
-  </style>
-
-  <script>
-    import Masonry from "masonry-layout";
-    import imagesLoaded from "imagesloaded";
-
-    function initMasonry() {
-      const grid = document.getElementById("masonry-gallery");
-      if (!grid) return;
-
-      const msnry = new Masonry(grid, {
-        itemSelector: ".masonry-item",
-        columnWidth: ".masonry-item",
-        percentPosition: true,
-        gutter: 16,
-      });
-
-      // Re-layout after all images have loaded
-      const imgLoad = imagesLoaded(grid);
-      imgLoad.on("progress", () => {
-        msnry.layout();
-      });
-    }
-
-    // Initialize on first load
-    initMasonry();
-
-    // Re-initialize on Astro page navigation (View Transitions)
-    document.addEventListener("astro:after-swap", initMasonry);
-  </script>
+  <script src="../scripts/mobile-menu.ts"></script>
+  <script src="../scripts/gallery.ts"></script>
 </Layout>

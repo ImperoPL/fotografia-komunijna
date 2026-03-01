@@ -17,6 +17,12 @@ pnpm-debug.log*
 .env
 .env.production
 
+# images (large files stored locally, not in git)
+src/assets/gallery/*
+!src/assets/gallery/.gitkeep
+src/assets/about/*
+!src/assets/about/.gitkeep
+
 # macOS-specific files
 .DS_Store
 
